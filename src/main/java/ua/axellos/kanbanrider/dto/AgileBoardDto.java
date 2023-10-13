@@ -9,6 +9,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -16,12 +17,14 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class AgileBoardDto {
 
-    private int id;
+    private Long id;
 
     @Size(max = 255)
     @NotNull
     @NotBlank
     private String name;
+
+    private List<AgileBoardColumnDto> columns;
 
     private LocalDateTime createdAt;
 
