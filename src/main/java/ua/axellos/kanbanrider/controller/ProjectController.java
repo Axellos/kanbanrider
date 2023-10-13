@@ -2,6 +2,7 @@ package ua.axellos.kanbanrider.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -38,5 +39,13 @@ public class ProjectController {
         Project project = projectService.create(projectDto, ownerId);
 
         return new ResponseEntity<>(projectMapper.map(project), HttpStatus.CREATED);
+    }
+
+    @PatchMapping("{id}")
+    @PreAuthorize("@projectAccessManager.canUpdateProject(#id, authentication)")
+    public ResponseEntity<ProjectDto> updateProject(@PathVariable Long id, @RequestBody @Validated ProjectDto projectDto) {
+        Project project = projectService.updateById(id, projectDto);
+
+        return new ResponseEntity<>(projectMapper.map(project), HttpStatus.OK);
     }
 }

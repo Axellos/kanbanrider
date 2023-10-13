@@ -1,8 +1,10 @@
 package ua.axellos.kanbanrider.service.impl;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ua.axellos.kanbanrider.dto.ProjectDto;
 import ua.axellos.kanbanrider.dto.mapper.ProjectMapper;
+import ua.axellos.kanbanrider.exception.ModelNotFoundException;
 import ua.axellos.kanbanrider.exception.ProjectNameIsUsedException;
 import ua.axellos.kanbanrider.model.Project;
 import ua.axellos.kanbanrider.repository.ProjectRepository;
@@ -20,6 +22,12 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    public Project findById(Long id) {
+        return projectRepository.findById(id)
+                .orElseThrow(() -> new ModelNotFoundException("Project", id));
+    }
+
+    @Override
     public List<Project> findAllByOwnerId(String ownerId) {
         return projectRepository.findAllByOwnerId(ownerId);
     }
@@ -29,6 +37,18 @@ public class ProjectServiceImpl implements ProjectService {
         checkIfProjectNameUniqueForOwner(projectDto.getName(), ownerId);
         Project project = ProjectMapper.INSTANCE.map(projectDto);
         project.setOwnerId(ownerId);
+
+        return projectRepository.save(project);
+    }
+
+    @Override
+    @Transactional
+    public Project updateById(Long id, ProjectDto projectDto) {
+        Project project = findById(id);
+        if (! projectDto.getName().equals(project.getName())) {
+            checkIfProjectNameUniqueForOwner(projectDto.getName(), project.getOwnerId());
+        }
+        ProjectMapper.INSTANCE.update(projectDto, project);
 
         return projectRepository.save(project);
     }
