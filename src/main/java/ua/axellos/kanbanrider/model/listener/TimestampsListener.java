@@ -10,7 +10,12 @@ import java.time.LocalDateTime;
 public class TimestampsListener {
 
     @PrePersist
-    public void setCreatedAt(Timestampable timestampable) {
+    public void setCreatedAt(Object object) {
+        if (! (object instanceof Timestampable)) {
+            return;
+        }
+
+        Timestampable timestampable = (Timestampable) object;
         Timestamps timestamps = timestampable.getTimestamps();
 
         if (timestamps == null) {
@@ -22,7 +27,12 @@ public class TimestampsListener {
     }
 
     @PreUpdate
-    public void setUpdatedAt(Timestampable timestampable) {
+    public void setUpdatedAt(Object object) {
+        if (! (object instanceof Timestampable)) {
+            return;
+        }
+
+        Timestampable timestampable = (Timestampable) object;
         Timestamps timestamps = timestampable.getTimestamps();
 
         timestamps.setUpdatedAt(LocalDateTime.now());
