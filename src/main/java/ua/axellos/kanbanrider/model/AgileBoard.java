@@ -7,6 +7,7 @@ import lombok.Setter;
 import ua.axellos.kanbanrider.model.listener.TimestampsListener;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -25,4 +26,7 @@ public class AgileBoard extends BaseEntity implements Timestampable {
     @ManyToOne
     @JoinColumn(name = "project_id", nullable = false)
     private Project project;
+
+    @OneToMany(mappedBy = "agileBoard", cascade = CascadeType.ALL)
+    private List<AgileBoardColumn> columns;
 }
