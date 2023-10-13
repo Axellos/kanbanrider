@@ -13,6 +13,10 @@ public class ProjectAccessManager {
         this.projectRepository = projectRepository;
     }
 
+    public boolean canViewProject(Long projectId, Authentication authentication) {
+        return projectRepository.existsByIdAndOwnerId(projectId, authentication.getName());
+    }
+
     public boolean canUpdateProject(Long projectId, Authentication authentication) {
         return projectRepository.existsByIdAndOwnerId(projectId, authentication.getName());
     }

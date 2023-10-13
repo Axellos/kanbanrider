@@ -47,6 +47,11 @@ public class AgileBoardServiceImpl implements AgileBoardService {
         return agileBoardRepository.save(agileBoard);
     }
 
+    @Override
+    public List<AgileBoard> findAllByProjectId(Long projectId) {
+        return agileBoardRepository.findAllByProjectId(projectId);
+    }
+
     private void setDefaultColumns(AgileBoard agileBoard) {
         List<AgileBoardColumn> columns = AgileBoardColumnMapper.INSTANCE.map(defaultColumns);
         columns.forEach(column -> column.setAgileBoard(agileBoard));

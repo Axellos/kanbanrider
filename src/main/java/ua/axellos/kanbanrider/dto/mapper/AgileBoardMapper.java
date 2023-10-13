@@ -6,6 +6,8 @@ import org.mapstruct.factory.Mappers;
 import ua.axellos.kanbanrider.dto.AgileBoardDto;
 import ua.axellos.kanbanrider.model.AgileBoard;
 
+import java.util.List;
+
 @Mapper
 public interface AgileBoardMapper {
 
@@ -16,4 +18,6 @@ public interface AgileBoardMapper {
     AgileBoardDto map(AgileBoard agileBoard);
 
     AgileBoard map(AgileBoardDto agileBoardDto);
+
+    List<AgileBoardDto> map(List<AgileBoard> agileBoards);
 }

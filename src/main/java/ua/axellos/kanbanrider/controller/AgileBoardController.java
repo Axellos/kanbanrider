@@ -10,6 +10,8 @@ import ua.axellos.kanbanrider.dto.mapper.AgileBoardMapper;
 import ua.axellos.kanbanrider.model.AgileBoard;
 import ua.axellos.kanbanrider.service.AgileBoardService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("api/projects/{projectId}/agile-boards")
 public class AgileBoardController {
@@ -18,6 +20,14 @@ public class AgileBoardController {
 
     public AgileBoardController(AgileBoardService agileBoardService) {
         this.agileBoardService = agileBoardService;
+    }
+
+    @GetMapping
+    @PreAuthorize("@projectAccessManager.canViewProject(#projectId, authentication)")
+    public ResponseEntity<List<AgileBoardDto>> getProjectAgileBoards(@PathVariable Long projectId) {
+        List<AgileBoard> agileBoards = agileBoardService.findAllByProjectId(projectId);
+
+        return new ResponseEntity<>(AgileBoardMapper.INSTANCE.map(agileBoards), HttpStatus.OK);
     }
 
     @PostMapping
