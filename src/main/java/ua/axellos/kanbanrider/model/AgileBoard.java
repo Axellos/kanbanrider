@@ -14,23 +14,19 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "projects")
+@Table(name = "agile_boards")
 @EntityListeners(TimestampsListener.class)
-public class Project extends BaseEntity implements Timestampable {
+public class AgileBoard extends BaseEntity implements Timestampable {
 
     private String name;
 
-    private String ownerId;
-
-    private String prefix;
-
-    private Integer startingNumber;
-
-    private String description;
-
-    @OneToMany(mappedBy = "project")
-    private List<AgileBoard> agileBoards;
-
     @Embedded
     private Timestamps timestamps;
+
+    @ManyToOne
+    @JoinColumn(name = "project_id", nullable = false)
+    private Project project;
+
+    @OneToMany(mappedBy = "agileBoard", cascade = CascadeType.ALL)
+    private List<AgileBoardColumn> columns;
 }
